@@ -9,6 +9,7 @@
     <title>ZEBRA</title>
     <link rel="shortcut icon" href="/media/zebra-icon.jpeg" type="image/x-icon" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -115,30 +116,33 @@
             text-align: justify;
         }
 
-        .roadmap-border{
+        .roadmap-border {
             border: 1px solid #fff;
             background-color: #010001;
         }
-        .roadmap-section{
+
+        .roadmap-section {
             background-image: url('/media/roadmap-bg.png');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
         }
-        .roadmap-list{
+
+        .roadmap-list {
             list-style-image: url('/media/zebra-icon.jpeg');
         }
 
-        .roadmap-list li{
+        .roadmap-list li {
             padding: 0px 8px;
             padding-bottom: 8px;
         }
-        .subtext{
+
+        .subtext {
             font-size: 14px;
             color: rgba(179, 179, 179, 0.994);
         }
 
-        .preloader{
+        .preloader {
             position: fixed;
             display: flex;
             background-color: #010001;
@@ -147,6 +151,25 @@
             height: 100vh;
             width: 100vw;
             z-index: 100000;
+        }
+        .card {
+            background-color: #010001;
+            border-radius: 0;
+        }
+        .zebra-icon-group img{
+            border-radius: 50%;
+        }
+        .staking-pool-timer {
+            font-size: 12px;
+            text-align: right;
+        }
+        .faq-content h5:hover{
+            cursor: pointer;
+        }
+        .faq-content-item ol li{
+            padding-left: 4px;
+            padding-bottom: 8px;
+            font-size: 14px;
         }
 
         @media (max-width: 575.98px) {}
@@ -164,7 +187,8 @@
             .about-list-item-head {
                 text-align: center;
             }
-            .roadmap-border{
+
+            .roadmap-border {
                 border: none;
             }
         }
@@ -180,7 +204,8 @@
 <body>
     <!-- Preloader -->
     <div class="preloader">
-        <img src="/media/zebra_white.jpeg" class="mx-auto animate__animated animate__pulse animate__infinite" style="border-radius: 25%;" width="200" alt="Logo">
+        <img src="/media/zebra_white.jpeg" class="mx-auto animate__animated animate__pulse animate__infinite"
+            style="border-radius: 25%;" width="200" alt="Logo">
     </div>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-lg-3 px-md-3 px-lg-5 mx-lg-5 mx-md-3">
@@ -341,12 +366,14 @@
             <div class="container">
                 <div class="row roadmap-border py-lg-5">
                     <div class="col-md-8 mx-auto text-center">
-                        <img src="/media/roadmap.png" alt="rodmap" class="animate__animated animate__headShake animate__infinite mx-auto" style="width: 60% ;">
+                        <img src="/media/roadmap.png" alt="rodmap"
+                            class="animate__animated animate__headShake animate__infinite mx-auto" style="width: 60% ;">
                     </div>
                     <div class="col-md-6 d-lg-flex justify-content-lg-end">
                         <div class="px-5">
                             <p class="text-uppercase display-1">Phase one</p>
-                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our worst times"</p>
+                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our
+                                worst times"</p>
                             <ul class="roadmap-list text-uppercase">
                                 <li>Team Recruitment</li>
                                 <li>Create Socials</li>
@@ -358,7 +385,8 @@
                     <div class="col-md-6 d-lg-flex justify-content-lg-start">
                         <div class="px-5">
                             <p class="text-uppercase display-1">Phase two</p>
-                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our worst times"</p>
+                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our
+                                worst times"</p>
                             <ul class="roadmap-list text-uppercase">
                                 <li>PCS STEALTH LAUNCH</li>
                                 <li>RELEASE UTILITY #1 (STAKING)</li>
@@ -366,6 +394,102 @@
                                 <li>CONTESTS & GIVEAWAYS</li>
                                 <li>KYC</li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Staking pool -->
+        <section class="mb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="text-center">
+                            <img src="/media/staking.png" alt="staking"
+                                class="animate__animated animate__headShake animate__infinite mx-auto"
+                                style="width: 100% ;">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card border">
+                            <div class="card-body">
+                                <div class="card-heading d-flex justify-content-between mb-5">
+                                    <div class="zebra-icon-group">
+                                        <img src="/media/zebra_white.jpeg" alt="icon" height="30">
+                                        <img src="/media/zebra_white.jpeg" alt="icon" height="30">
+                                    </div>
+                                    <div class="token-name-group">
+                                        <h5>ZebraInu-ZebraInu</h5>
+                                        <div class="staking-pool-timer">
+                                            <span>00</span>:<span>00</span>:<span>00</span>:<span>00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-main">
+                                    <div class="staking-details d-flex justify-content-between mb-2">
+                                        <span>APY:</span>
+                                        <span class="text-right">50%</span>
+                                    </div>
+                                    <div class="staking-details d-flex justify-content-between mb-2">
+                                        <span>Deposit:</span>
+                                        <span class="text-right">ZebraInu</span>
+                                    </div>
+                                    <div class="staking-details d-flex justify-content-between mb-3">
+                                        <span>Earn:</span>
+                                        <span class="text-right">ZebraInu</span>
+                                    </div>
+                                    <button class="btn">Unlock wallet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card border">
+                            <div class="card-body">
+                                <div class="card-heading d-flex justify-content-between mb-5">
+                                    <div class="zebra-icon-group">
+                                        <img src="/media/bsc-icon.png" alt="icon" height="30">
+                                        <img src="/media/zebra_white.jpeg" alt="icon" height="30">
+                                    </div>
+                                    <div class="token-name-group">
+                                        <h5>ZebraInu-ZebraInu</h5>
+                                        <div class="staking-pool-timer">
+                                            <span>00</span>:<span>00</span>:<span>00</span>:<span>00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-main">
+                                    <div class="staking-details d-flex justify-content-between mb-2">
+                                        <span>APY:</span>
+                                        <span class="text-right">500%</span>
+                                    </div>
+                                    <div class="staking-details d-flex justify-content-between mb-2">
+                                        <span>Deposit:</span>
+                                        <span class="text-right">Cake-LP</span>
+                                    </div>
+                                    <div class="staking-details d-flex justify-content-between mb-3">
+                                        <span>Earn:</span>
+                                        <span class="text-right">ZebraInu</span>
+                                    </div>
+                                    <button class="btn">Unlock wallet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3 mt-3 ms-auto">
+                        <div class="faq-content px-3">
+                            <h5 class="d-flex justify-content-between text-uppercase">
+                                <span>How to stake lp?</span>
+                                <span class="text-right"><i class="fa-solid fa-plus" id="togglePlus"></i></span>
+                            </h5>
+                            <div class="faq-content-item d-none">
+                                <ol>
+                                    <li> Make sure that you are holding Squidgrow & BNB assets in your wallet </li>
+                                    <li> Go to PCS add LP subpage <a href="#">(click here)</a></li>
+                                    <li> Add a pair Squidgrow + BNB </li>
+                                    <li> Stake LP tokens </li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -381,6 +505,15 @@
     <script src="js/app.js" type="module"></script>
     <script>
         window.onload = document.getElementsByClassName('preloader')[0].style.display = "none";
+
+        let howToStakeItem = document.querySelector('.faq-content-item')
+        let togglePlus = document.querySelector('#togglePlus')
+
+        document.querySelector('.faq-content h5').addEventListener('click', function(){
+            howToStakeItem.classList.toggle('d-none')
+            togglePlus.classList.toggle('fa-plus')
+            togglePlus.classList.toggle('fa-minus')
+        })
     </script>
 </body>
 
