@@ -114,6 +114,29 @@
             text-align: justify;
         }
 
+        .roadmap-border{
+            border: 1px solid #fff;
+            background-color: #010001;
+        }
+        .roadmap-section{
+            background-image: url('/media/roadmap-bg.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .roadmap-list{
+            list-style-image: url('/media/zebra-icon.jpeg');
+        }
+
+        .roadmap-list li{
+            padding: 0px 8px;
+            padding-bottom: 8px;
+        }
+        .subtext{
+            font-size: 14px;
+            color: rgba(179, 179, 179, 0.994);
+        }
+
         @media (max-width: 575.98px) {}
 
         /*Small devices (landscape phones, less than 768px)*/
@@ -128,6 +151,9 @@
 
             .about-list-item-head {
                 text-align: center;
+            }
+            .roadmap-border{
+                border: none;
             }
         }
 
@@ -251,7 +277,7 @@
             </div>
         </section>
         <!-- Tokenomics section -->
-        <section class="mb-3">
+        <section class="mb-5">
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 p-5 p-lg-0">
@@ -295,15 +321,34 @@
             </div>
         </section>
         <!-- Roadmap -->
-        <section>
+        <section class="mb-5 roadmap-section py-lg-5">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row roadmap-border py-lg-5">
+                    <div class="col-md-8 mx-auto text-center">
+                        <img src="/media/roadmap.png" alt="rodmap" class="animate__animated animate__headShake animate__infinite mx-auto" style="width: 60% ;">
+                    </div>
+                    <div class="col-md-6 d-lg-flex justify-content-lg-end">
                         <div class="px-5">
                             <p class="text-uppercase display-1">Phase one</p>
                             <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our worst times"</p>
                             <ul class="roadmap-list text-uppercase">
                                 <li>Team Recruitment</li>
+                                <li>Create Socials</li>
+                                <li>Create Logo</li>
+                                <li>community growth and development</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-lg-flex justify-content-lg-start">
+                        <div class="px-5">
+                            <p class="text-uppercase display-1">Phase two</p>
+                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our worst times"</p>
+                            <ul class="roadmap-list text-uppercase">
+                                <li>PCS STEALTH LAUNCH</li>
+                                <li>RELEASE UTILITY #1 (STAKING)</li>
+                                <li>INITIAL MARKETING PUSH (CALL CHANNELS & INFLUENCERS)</li>
+                                <li>CONTESTS & GIVEAWAYS</li>
+                                <li>KYC</li>
                             </ul>
                         </div>
                     </div>
