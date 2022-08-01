@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Platinum Finance</title>
+    <link rel="shortcut icon" href="/7667-media-favicon.png" type="image/x-icon" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #010001;
+            color: #fff;
+            font-family: 'Bubblegum Sans', cursive;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bg-dark {
+            background-color: #010001 !important;
+        }
+
+        img.circle-img {
+            border-radius: 25px;
+        }
+
+        .hero-bg {
+            background-image: url(/media/zebra_dark.jpeg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            height: 50vh;
+        }
+
+        .custom-heading {
+            letter-spacing: 3px;
+        }
+
+        .border-box {
+            padding: 12px 16px;
+            padding-left: 0;
+            border: 2px solid white;
+            border-right: none;
+            border-top: none;
+            border-left: none;
+            border-left-width: 3px;
+        }
+
+        .btn {
+            position: relative;
+            text-transform: uppercase;
+            color: #fff;
+            letter-spacing: 3px;
+            padding: 16px 32px;
+            border-radius: 0;
+            border: 1px solid #fff;
+            box-shadow: 4px 4px #fff;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #010001;
+            box-shadow: 4px 4px #010001;
+        }
+
+        .full-border {
+            border: 1px solid #fff;
+        }
+
+        .ca-box {
+            font-family: Poppins, sans-serif;
+            word-wrap: break-word;
+            font-size: 12px;
+        }
+
+        .tax-indicator {
+            font-family: Poppins, sans-serif;
+        }
+
+        .list-group-item {
+            background-color: #010001;
+            color: #fff;
+            border-color: #fff;
+            border-radius: 0 !important;
+        }
+
+        header {
+            /* border-bottom: 1px solid #fff; */
+        }
+
+        .nav-link {
+            text-transform: uppercase;
+            padding: 8px 16px !important;
+            color: #fff !important;
+        }
+
+        .navbar-nav {
+            /* border-left: 1px solid #fff; */
+        }
+
+        .about-list-item-text {
+            /* font-size: 16px; */
+            color: rgba(179, 179, 179, 0.994);
+            text-align: justify;
+        }
+
+        .about-list-item-head {
+            text-align: justify;
+        }
+
+        @media (max-width: 575.98px) {}
+
+        /*Small devices (landscape phones, less than 768px)*/
+        @media (max-width: 767.98px) {}
+
+        /*Medium devices (tablets, less than 992px)*/
+        @media (max-width: 991.98px) {
+            .about-list-item-text {
+                font-size: 12px;
+                text-align: center;
+            }
+
+            .about-list-item-head {
+                text-align: center;
+            }
+        }
+
+        /*Large devices (desktops, less than 1200px)*/
+        @media (max-width: 1199.98px) {}
+
+        /*X-Large devices (large desktops, less than 1400px)*/
+        @media (max-width: 1399.98px) {}
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-lg-3 px-md-3 px-lg-5 mx-lg-5 mx-md-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="/media/zebra_white.jpeg" class="img-fluid circle-img" width="50" alt="Logo">
+                    <!-- Zebra Inu -->
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto py-md-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">ABOUT</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Tokenomics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Staking</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Roadmap</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Chart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Whitepaper</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <!-- Hero Section -->
+        <section class="mb-3">
+            <div class="container hero-bg animate__animated animate__zoomIn animate__slow"></div>
+        </section>
+        <!-- Welcome section -->
+        <section class="mb-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 px-5 mb-5">
+                        <h5 class="custom-heading mb-5"><span class="border-box">This Is ZEBRA</span></h5>
+                        <p class="display-1 text-uppercase mb-5">
+                            ZebraInu, safest growing meme utility token
+                        </p>
+                        <a href="#" class="btn">Buy now</a>
+                    </div>
+                    <div class="col-md-6 px-5 mb-5 d-md-flex flex-md-column justify-content-center">
+                        <img src="/media/zebra_white.jpeg" alt="Logo" width="250" class="circle-img mx-md-auto">
+                        <div class="full-border ca-box my-3 px-3 py-2">
+                            <h5>Contract Address</h5>
+                            <span>0x4433b49A95713685BA6A9Ca9F240A22F07d08FbB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- About section -->
+        <section class="mb-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mb-3 text-center d-md-flex flex-md-column justify-content-md-center">
+                        <img src="/media/about.png" alt="about"
+                            class="animate__animated animate__headShake animate__infinite mx-auto" width="300">
+                    </div>
+                    <div class="col-md-6 mb-3 px-5">
+                        <p class="text-justify">
+                            ZebraInu is set out to become the biggest and safest utility meme coin on the Binance Smart
+                            Chain. We will continue to grow until we reach the top with marketing, utility and more!
+                        </p>
+                        <ul class="list-group mb-5">
+                            <li class="list-group-item d-flex flex-column flex-lg-row">
+                                <div class="py-3 py-lg-2 px-lg-5 ps-lg-4">
+                                    <h3 class="about-list-item-head">MEME</h3>
+                                </div>
+                                <div
+                                    class="about-list-item-text d-lg-flex flex-lg-column justify-content-lg-center ps-lg-5">
+                                    <span>ZebraInu is a meme token named after the popular animal “Zebra”</span>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex flex-column flex-lg-row">
+                                <div class="py-3 py-lg-2 px-lg-5 ps-lg-4">
+                                    <h3 class="about-list-item-head">UTILITY</h3>
+                                </div>
+                                <div
+                                    class="about-list-item-text d-lg-flex flex-lg-column justify-content-lg-center ps-lg-4">
+                                    <span>Staking, liquidity-pool staking, and utilities already released. More
+                                        utilities are to come, stick around for more Zebra themed utility!!</span>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex flex-column flex-lg-row">
+                                <div class="py-3 py-lg-2 pe-lg-4 ps-lg-4">
+                                    <h3 class="about-list-item-head">HUGE<br />MARKETING</h3>
+                                </div>
+                                <div class="about-list-item-text d-lg-flex flex-lg-column justify-content-lg-center">
+                                    <span>With the owner of the token being a day one shib holder, the connections and
+                                        possibilities for marketing are endless!</span>
+                                </div>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn">Buy now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Tokenomics section -->
+        <section class="mb-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 p-5 p-lg-0">
+                        <div class="d-flex flex-column flex-lg-row">
+                            <div class="d-flex flex-column justify-content-between border py-5">
+                                <span class="text-uppercase mb-3 mx-auto"><span
+                                        class="display-3 tax-indicator fw-bold me-3">8%</span> total buy tax</span>
+                                <span class="text-uppercase mt-3 mx-auto"><span
+                                        class="display-3 tax-indicator fw-bold me-3">8%</span> total sell tax</span>
+                            </div>
+                            <div class="d-flex flex-column justify-content-between border py-5">
+                                <span class="text-uppercase mb-2 ms-4">Total supply:</span>
+                                <span class="text-uppercase mb-3 mx-auto ms-lg-4"><span
+                                        class="supply-indicator fw-bold me-1">1 000 000 000 000 000</span> zebra</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">19%</span>staking</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">5%</span> team</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">8%</span> marketing</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">8%</span> development</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">4%</span> giveaway</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">15%</span>partnerships</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">3%</span> airdrop</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-4">9%</span> exchanges</span>
+                                <span class="text-uppercase mb-3 ms-4"><span
+                                        class="tokenomics-indicator fw-bold me-3">25%</span> liquidity pool</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 text-center d-md-flex flex-md-column justify-content-md-center">
+                        <img src="/media/tokenomics.png" alt="about"
+                            class="animate__animated animate__headShake animate__infinite mx-auto" style="width: 80% ;">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Roadmap -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="px-5">
+                            <p class="text-uppercase display-1">Phase one</p>
+                            <p class="subtext">"The zebra is the worst part of us when we are face-to-face with our worst times"</p>
+                            <ul class="roadmap-list text-uppercase">
+                                <li>Team Recruitment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.0.2/bignumber.min.js"></script>
+    <script type="text/javascript" src="js/dist-web3.min.js"></script>
+    <script type="text/javascript" src="js/dist-index.js"></script>
+    <script type="text/javascript" src="js/umd-index.min.js"></script>
+    <script src="js/app.js" type="module"></script>
+</body>
+
+</html>
