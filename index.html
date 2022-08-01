@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Platinum Finance</title>
-    <link rel="shortcut icon" href="/7667-media-favicon.png" type="image/x-icon" />
+    <title>ZEBRA</title>
+    <link rel="shortcut icon" href="/media/zebra-icon.jpeg" type="image/x-icon" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -137,6 +137,17 @@
             color: rgba(179, 179, 179, 0.994);
         }
 
+        .preloader{
+            position: fixed;
+            display: flex;
+            background-color: #010001;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            z-index: 100000;
+        }
+
         @media (max-width: 575.98px) {}
 
         /*Small devices (landscape phones, less than 768px)*/
@@ -166,6 +177,10 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <img src="/media/zebra_white.jpeg" class="mx-auto animate__animated animate__pulse animate__infinite" style="border-radius: 25%;" width="200" alt="Logo">
+    </div>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-lg-3 px-md-3 px-lg-5 mx-lg-5 mx-md-3">
             <div class="container-fluid">
@@ -363,6 +378,9 @@
     <script type="text/javascript" src="js/dist-index.js"></script>
     <script type="text/javascript" src="js/umd-index.min.js"></script>
     <script src="js/app.js" type="module"></script>
+    <script>
+        window.onload = document.getElementsByClassName('preloader')[0].style.display = "none";
+    </script>
 </body>
 
 </html>
