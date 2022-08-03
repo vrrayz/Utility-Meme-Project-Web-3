@@ -9,8 +9,12 @@
     <title>ZEBRA</title>
     <link rel="shortcut icon" href="/media/zebra-icon.jpeg" type="image/x-icon" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/3.0.0-rc.5/web3.min.js"></script>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.7.1/dist/umd/index.min.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet" />
@@ -152,21 +156,26 @@
             width: 100vw;
             z-index: 100000;
         }
+
         .card {
             background-color: #010001;
             border-radius: 0;
         }
-        .zebra-icon-group img{
+
+        .zebra-icon-group img {
             border-radius: 50%;
         }
+
         .staking-pool-timer {
             font-size: 12px;
             text-align: right;
         }
-        .faq-content h5:hover{
+
+        .faq-content h5:hover {
             cursor: pointer;
         }
-        .faq-content-item ol li{
+
+        .faq-content-item ol li {
             padding-left: 4px;
             padding-bottom: 8px;
             font-size: 14px;
@@ -258,7 +267,9 @@
                             ZebraInu, safest growing meme utility token
                         </p>
                         <div class="text-center">
-                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056" target="_blank" class="btn animate__animated animate__heartBeat animate__infinite">Buy now</a>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056"
+                                target="_blank" class="btn animate__animated animate__heartBeat animate__infinite">Buy
+                                now</a>
                         </div>
                     </div>
                     <div class="col-md-6 px-5 mb-5 d-md-flex flex-md-column justify-content-center">
@@ -315,7 +326,9 @@
                             </li>
                         </ul>
                         <div class="text-center">
-                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056" target="_blank" class="btn animate__animated animate__heartBeat animate__infinite">Buy now</a>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056"
+                                target="_blank" class="btn animate__animated animate__heartBeat animate__infinite">Buy
+                                now</a>
                         </div>
                     </div>
                 </div>
@@ -496,7 +509,9 @@
                             <div class="faq-content-item d-none">
                                 <ul class="roadmap-list">
                                     <li> Make sure that you are holding ZebraInu & BNB assets in your wallet </li>
-                                    <li> Go to PCS add LP subpage <a href="https://pancakeswap.finance/add/BNB/0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056" target="_blank">(click here)</a></li>
+                                    <li> Go to PCS add LP subpage <a
+                                            href="https://pancakeswap.finance/add/BNB/0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056"
+                                            target="_blank">(click here)</a></li>
                                     <li> Add a pair ZebraInu + BNB </li>
                                     <li> Stake LP tokens </li>
                                 </ul>
@@ -510,17 +525,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.0.2/bignumber.min.js"></script>
-    <script type="text/javascript" src="js/dist-web3.min.js"></script>
-    <script type="text/javascript" src="js/dist-index.js"></script>
-    <script type="text/javascript" src="js/umd-index.min.js"></script>
-    <script src="js/app.js" type="module"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="/js/app.js" type="module"></script>
     <script>
         window.onload = document.getElementsByClassName('preloader')[0].style.display = "none";
 
         let howToStakeItem = document.querySelector('.faq-content-item')
         let togglePlus = document.querySelector('#togglePlus')
 
-        document.querySelector('.faq-content h5').addEventListener('click', function(){
+        document.querySelector('.faq-content h5').addEventListener('click', function () {
             howToStakeItem.classList.toggle('d-none')
             togglePlus.classList.toggle('fa-plus')
             togglePlus.classList.toggle('fa-minus')
