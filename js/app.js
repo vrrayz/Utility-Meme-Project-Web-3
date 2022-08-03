@@ -1713,6 +1713,7 @@ Array.prototype.map.call(walletModalBtn, (x) => {
     if (window.ethereum) {
       provider = new ethers.providers.Web3Provider(window.ethereum);
     } else if (wcDefault) {
+		await wcDefault.enable();
       provider = new ethers.providers.Web3Provider(wcDefault);
     }
     let myModal = new bootstrap.Modal(
