@@ -89,7 +89,7 @@
                         <img src="/media/zebra_white.png" alt="Logo" width="250" class="circle-img mx-md-auto">
                         <div class="full-border ca-box my-3 px-3 py-2">
                             <h5>Contract Address</h5>
-                            <span>0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056</span>
+                            <span id="tokenAddress">0xCAa5ECF38B32C27C5E651D2DbAcD7750EEF6F056</span>
                         </div>
                     </div>
                 </div>
@@ -282,7 +282,7 @@
                                         <div class="staking-details d-flex justify-content-between mb-2">
                                             <span id="zzEarned" class="h4 my-auto w-50">0</span>
                                             <div class="w-50">
-                                            <button class="btn d-block w-100" id="claimZebra">REAR</button>
+                                            <button class="btn d-block w-100" id="claimZebra">CLAIM</button>
                                             </div>
                                         </div>
                                         <div>ZEBRA STAKED</div>
@@ -333,7 +333,7 @@
                                         <div class="staking-details d-flex justify-content-between mb-2">
                                             <span id="zzCakeEarned" class="h4 my-auto w-50">0</span>
                                             <div class="w-50">
-                                            <button class="btn d-block w-100" id="claimZebraCake">REAR</button>
+                                            <button class="btn d-block w-100" id="claimZebraCake">DEPOSIT</button>
                                             </div>
                                         </div>
                                         <div>CAKE STAKED(to ZEBRA)</div>
@@ -397,11 +397,49 @@
             </div>
         </div>
         <!-- End unlock wallet modal -->
+        <!-- Deposit zebra Modal -->
+        <div class="modal" id="depositZebraModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Deposit ZebraInu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="depositZebraInput mb-2">Balance: <span class="zebraBalance">0</span></label>
+                        <input type="number" name="zebraAmount" class="form-control mb-3" placeholder="Enter staking amount" id="depositZebraInput">
+                        <div class="d-flex justify-content-center">
+                            <button class="btn p-2 me-2 " id="approveZebraButton">Approve</button>
+                            <button class="btn p-2 ms-2 " id="stakeZebraButton" disabled>Stake</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end Deposit zebra modal -->
+        <!-- Withdraw zebra Modal -->
+         <div class="modal" id="withdrawZebraModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Withdraw ZebraInu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="number" class="form-control mb-3" placeholder="Enter amount" id="withdrawZebraInput">
+                        <div class="d-flex justify-content-center">
+                            <button class="btn p-2 me-2 " id="withdrawZebraButton">Withdraw</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end Withdraw zebra modal -->
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.0.2/bignumber.min.js"></script>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.0.2/bignumber.min.js"></script> -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="application/javascript"></script>
     <script src="/js/app.js" type="module"></script>
     <script>
         window.onload = document.getElementsByClassName('preloader')[0].style.display = "none";
