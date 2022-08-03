@@ -6,8 +6,28 @@ const cakeLpAddress = "0x2E6004C0afA04bb88bfBf560B40F96A8Eb3fF798";
 const stakingContractAddress = "0x434df6942154fc4A15008604a80B0eb65594EA6B";
 const tokenABI = [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
+    inputs: [
+      { internalType: "string", name: "name_", type: "string" },
+      { internalType: "string", name: "symbol_", type: "string" },
+      { internalType: "uint256", name: "totalSupply_", type: "uint256" },
+      { internalType: "address[4]", name: "addrs", type: "address[4]" },
+      {
+        internalType: "uint256[4]",
+        name: "buyFeeSetting_",
+        type: "uint256[4]",
+      },
+      {
+        internalType: "uint256[4]",
+        name: "sellFeeSetting_",
+        type: "uint256[4]",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenBalanceForReward_",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "payable",
     type: "constructor",
   },
   {
@@ -39,13 +59,76 @@ const tokenABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
         indexed: false,
+        internalType: "bool",
+        name: "isExcluded",
+        type: "bool",
+      },
+    ],
+    name: "ExcludeFromFees",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address[]",
+        name: "accounts",
+        type: "address[]",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "isExcluded",
+        type: "bool",
+      },
+    ],
+    name: "ExcludeMultipleAccountsFromFees",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "uint256",
-        name: "minTokensBeforeSwap",
+        name: "newValue",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "oldValue",
         type: "uint256",
       },
     ],
-    name: "MinTokensBeforeSwapUpdated",
+    name: "GasForProcessingUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newLiquidityWallet",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldLiquidityWallet",
+        type: "address",
+      },
+    ],
+    name: "LiquidityWalletUpdated",
     type: "event",
   },
   {
@@ -65,6 +148,67 @@ const tokenABI = [
       },
     ],
     name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "iterations",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "claims",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "lastProcessedIndex",
+        type: "uint256",
+      },
+      { indexed: true, internalType: "bool", name: "automatic", type: "bool" },
+      { indexed: false, internalType: "uint256", name: "gas", type: "uint256" },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "processor",
+        type: "address",
+      },
+    ],
+    name: "ProcessedDividendTracker",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tokensSwapped",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "SendDividends",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "pair", type: "address" },
+      { indexed: true, internalType: "bool", name: "value", type: "bool" },
+    ],
+    name: "SetAutomatedMarketMakerPair",
     type: "event",
   },
   {
@@ -95,31 +239,8 @@ const tokenABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "enabled",
-        type: "bool",
-      },
-    ],
-    name: "SwapAndLiquifyEnabledUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
+      { indexed: true, internalType: "address", name: "from", type: "address" },
+      { indexed: true, internalType: "address", name: "to", type: "address" },
       {
         indexed: false,
         internalType: "uint256",
@@ -131,388 +252,338 @@ const tokenABI = [
     type: "event",
   },
   {
-    inputs: [],
-    name: "_liquidityFee",
-    outputs: [
+    anonymous: false,
+    inputs: [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "_marketingAddress",
-    outputs: [
-      {
+        indexed: true,
         internalType: "address",
-        name: "",
+        name: "newAddress",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldAddress",
         type: "address",
       },
     ],
+    name: "UpdateDividendTracker",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newAddress",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldAddress",
+        type: "address",
+      },
+    ],
+    name: "UpdateUniswapV2Router",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "AmountLiquidityFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "_marketingFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    name: "AmountMarketingFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "_maxTxAmount",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "_previousMarketingFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "_taxFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    name: "AmountTokenRewardsFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "bool", name: "value", type: "bool" },
     ],
-    name: "allowance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    name: "EnemyAddress",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "_isEnemy",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "_marketingWalletAddress",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
+      { internalType: "address", name: "owner", type: "address" },
+      { internalType: "address", name: "spender", type: "address" },
     ],
+    name: "allowance",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "spender", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "automatedMarketMakerPairs",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
     name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "buyDeadFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "buyLiquidityFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "buyMarketingFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "buyTokenRewardsFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "deadWallet",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "decimals",
+    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "spender", type: "address" },
+      { internalType: "uint256", name: "subtractedValue", type: "uint256" },
+    ],
+    name: "decreaseAllowance",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "dividendTokenBalanceOf",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "dividendTracker",
     outputs: [
       {
-        internalType: "uint8",
+        internalType: "contract TokenDividendTracker",
         name: "",
-        type: "uint8",
+        type: "address",
       },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "subtractedValue",
-        type: "uint256",
-      },
-    ],
-    name: "decreaseAllowance",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tAmount",
-        type: "uint256",
-      },
-    ],
-    name: "deliver",
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "excludeFromDividends",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "bool", name: "excluded", type: "bool" },
     ],
-    name: "excludeFromFee",
+    name: "excludeFromFees",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
+      { internalType: "address[]", name: "accounts", type: "address[]" },
+      { internalType: "bool", name: "excluded", type: "bool" },
     ],
-    name: "excludeFromReward",
+    name: "excludeMultipleAccountsFromFees",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "geUnlockTime",
+    name: "gasForProcessing",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "getAccountDividendsInfo",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "int256", name: "", type: "int256" },
+      { internalType: "int256", name: "", type: "int256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
+    inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
+    name: "getAccountDividendsInfoAtIndex",
+    outputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "int256", name: "", type: "int256" },
+      { internalType: "int256", name: "", type: "int256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
     ],
-    name: "includeInFee",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getClaimWait",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLastProcessedIndex",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getNumberOfDividendTokenHolders",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTotalDividendsDistributed",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "includeInReward",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "addedValue",
-        type: "uint256",
-      },
+      { internalType: "address", name: "spender", type: "address" },
+      { internalType: "uint256", name: "addedValue", type: "uint256" },
     ],
     name: "increaseAllowance",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "isExcludedFromFee",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "isExcludedFromDividends",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "isExcludedFromReward",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "isExcludedFromFees",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "time",
-        type: "uint256",
-      },
-    ],
-    name: "lock",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
     name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
+    outputs: [{ internalType: "string", name: "", type: "string" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "deductTransferFee",
-        type: "bool",
-      },
-    ],
-    name: "reflectionFromToken",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
+    inputs: [{ internalType: "uint256", name: "gas", type: "uint256" }],
+    name: "processDividendTracker",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -523,246 +594,148 @@ const tokenABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "rewardToken",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "sellDeadFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "sellLiquidityFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "sellMarketingFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "sellTokenRewardsFee",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "liquidityFee",
-        type: "uint256",
-      },
+      { internalType: "address", name: "pair", type: "address" },
+      { internalType: "bool", name: "value", type: "bool" },
     ],
-    name: "setLiquidityFeePercent",
+    name: "setAutomatedMarketMakerPair",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "marketingAddress",
-        type: "address",
-      },
+      { internalType: "uint256", name: "liquidity", type: "uint256" },
+      { internalType: "uint256", name: "rewardsFee", type: "uint256" },
+      { internalType: "uint256", name: "marketingFee", type: "uint256" },
+      { internalType: "uint256", name: "deadFee", type: "uint256" },
     ],
-    name: "setMarketingAddress",
+    name: "setBuyTaxes",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "addr", type: "address" }],
+    name: "setDeadWallet",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "marketingFee",
-        type: "uint256",
-      },
+      { internalType: "address payable", name: "wallet", type: "address" },
     ],
-    name: "setMarketingFeePercent",
+    name: "setMarketingWallet",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "maxTxPercent",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "liquidity", type: "uint256" },
+      { internalType: "uint256", name: "rewardsFee", type: "uint256" },
+      { internalType: "uint256", name: "marketingFee", type: "uint256" },
+      { internalType: "uint256", name: "deadFee", type: "uint256" },
     ],
-    name: "setMaxTxPercent",
+    name: "setSelTaxes",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newRouter",
-        type: "address",
-      },
-    ],
-    name: "setRouterAddress",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "_enabled",
-        type: "bool",
-      },
-    ],
-    name: "setSwapAndLiquifyEnabled",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "taxFee",
-        type: "uint256",
-      },
-    ],
-    name: "setTaxFeePercent",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_addr",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-    ],
-    name: "stepUp",
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "setSwapTokensAtAmount",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "swapAndLiquifyEnabled",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    name: "swapManual",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "swapTokensAtAmount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "symbol",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "rAmount",
-        type: "uint256",
-      },
-    ],
-    name: "tokenFromReflection",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalFees",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [{ internalType: "string", name: "", type: "string" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "totalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
     ],
     name: "transfer",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
+      { internalType: "address", name: "sender", type: "address" },
+      { internalType: "address", name: "recipient", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
     ],
     name: "transferFrom",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
     name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
@@ -771,13 +744,7 @@ const tokenABI = [
   {
     inputs: [],
     name: "uniswapV2Pair",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
@@ -795,16 +762,41 @@ const tokenABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "unlock",
+    inputs: [{ internalType: "uint256", name: "claimWait", type: "uint256" }],
+    name: "updateClaimWait",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    stateMutability: "payable",
-    type: "receive",
+    inputs: [{ internalType: "uint256", name: "newValue", type: "uint256" }],
+    name: "updateGasForProcessing",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
+  {
+    inputs: [{ internalType: "uint256", name: "val", type: "uint256" }],
+    name: "updateMinimumTokenBalanceForDividends",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newAddress", type: "address" }],
+    name: "updateUniswapV2Router",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "withdrawableDividendOf",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  { stateMutability: "payable", type: "receive" },
 ];
 const cakeLpAbi = [
   {
@@ -1655,37 +1647,36 @@ let withdrawCakeModalBs = new bootstrap.Modal(withdrawCakeModal);
 let withdrawCakeButton = document.querySelector("#withdrawCakeButton");
 let withdrawCakeInput = document.querySelector("#withdrawCakeInput");
 
-
 // deposit
 depositZebraButton.addEventListener("click", function () {
   toggleDepositZebraButton();
 });
 depositCakeButton.addEventListener("click", function () {
-	toggleDepositCakeButton();
-  });
+  toggleDepositCakeButton();
+});
 
 //   approve
 approveZebraButton.addEventListener("click", function () {
   approveZebra(depositZebraInput.value);
 });
 approveCakeButton.addEventListener("click", function () {
-	approveCake(depositCakeInput.value);
-  });
+  approveCake(depositCakeInput.value);
+});
 
 // stake
 stakeZebraButton.addEventListener("click", function () {
   stakeZebra(depositZebraInput.value);
 });
 stakeCakeButton.addEventListener("click", function () {
-	stakeCake(depositCakeInput.value);
-  });
+  stakeCake(depositCakeInput.value);
+});
 //   claim
 claimZebraButton.addEventListener("click", function () {
   claimZebra();
 });
 claimCakeButton.addEventListener("click", function () {
-	claimCake();
-  });
+  claimCake();
+});
 
 //   withdraw
 withdrawZebra.addEventListener("click", function () {
@@ -1695,12 +1686,11 @@ withdrawZebraButton.addEventListener("click", function () {
   withdrawZebraToken(withdrawZebraInput.value);
 });
 withdrawCake.addEventListener("click", function () {
-	toggleWithdrawCakeButton();
-  });
-  withdrawCakeButton.addEventListener("click", function () {
-	withdrawCakeToken(withdrawCakeInput.value);
-  });
-
+  toggleWithdrawCakeButton();
+});
+withdrawCakeButton.addEventListener("click", function () {
+  withdrawCakeToken(withdrawCakeInput.value);
+});
 
 // modal toggles
 function toggleDepositZebraButton() {
@@ -1708,15 +1698,15 @@ function toggleDepositZebraButton() {
   depositZebraModalBs.show();
 }
 function toggleDepositCakeButton() {
-	getUserCakeBalance();
-	depositCakeModalBs.show();
-  }
+  getUserCakeBalance();
+  depositCakeModalBs.show();
+}
 function toggleWithdrawZebraButton() {
   withdrawZebraModalBs.show();
 }
 function toggleWithdrawCakeButton() {
-	withdrawCakeModalBs.show();
-  }
+  withdrawCakeModalBs.show();
+}
 // If the user is already connected
 Array.prototype.map.call(walletModalBtn, (x) => {
   x.addEventListener("click", async function () {
@@ -1809,11 +1799,7 @@ async function connectContract() {
     provider
   );
   stakingContract = await stakingContract.deployed();
-  cakeLpContract = new ethers.Contract(
-    cakeLpAddress,
-    cakeLpAbi,
-    provider
-  );
+  cakeLpContract = new ethers.Contract(cakeLpAddress, cakeLpAbi, provider);
   cakeLpContract = await cakeLpContract.deployed();
 }
 
@@ -1832,7 +1818,7 @@ async function getUserZebraBalance() {
   }
 }
 async function getUserCakeBalance() {
-	let balance = await cakeLpContract.balanceOf(userAddress);
+  let balance = await cakeLpContract.balanceOf(userAddress);
   balance = ethers.utils.formatUnits(balance, decimals);
   let cakeBalanceElement = document.querySelectorAll(".cakeBalance");
   for (let index = 0; index < cakeBalanceElement.length; index++) {
@@ -1855,20 +1841,20 @@ async function approveZebra(amount) {
     });
 }
 async function approveCake(amount) {
-	// console.log(amount)
-	let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
-	// let nAmount = ethers.utils.parseUnits(amount, decimals);
-	await cakeLpContract
-	  .connect(signer)
-	  .approve(stakingContractAddress, nAmount)
-	  .then((res) => {
-		cakeLpContract.on("Approval", (owner, spender, amount, event) => {
-		  approveCakeButton.style.display = "none";
-		  stakeCakeButton.removeAttribute("disabled");
-		  console.log("Approved " + spender + " allowance " + amount);
-		});
-	  });
-  }
+  // console.log(amount)
+  let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
+  // let nAmount = ethers.utils.parseUnits(amount, decimals);
+  await cakeLpContract
+    .connect(signer)
+    .approve(stakingContractAddress, nAmount)
+    .then((res) => {
+      cakeLpContract.on("Approval", (owner, spender, amount, event) => {
+        approveCakeButton.style.display = "none";
+        stakeCakeButton.removeAttribute("disabled");
+        console.log("Approved " + spender + " allowance " + amount);
+      });
+    });
+}
 async function stakeZebra(amount) {
   // console.log(amount)
   let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
@@ -1889,44 +1875,43 @@ async function stakeZebra(amount) {
     });
 }
 async function stakeCake(amount) {
-	let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
-	await stakingContract
-	  .connect(signer)
-	  .depositCake(nAmount)
-	  .then((res) => {
-		cakeLpContract.on("Transfer", (from, to, value, event) => {
-		  // approveZebraButton.style.display = "none";
-		  // stakeZebraButton.removeAttribute("disabled");
-		  // console.log(from+" Transferred  "+value+" to "+to);
-		  if (from == userAddress && to == stakingContractAddress) {
-			depositCakeModalBs.hide();
-			updateDetails();
-		  }
-		});
-	  });
-  }
+  let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
+  await stakingContract
+    .connect(signer)
+    .depositCake(nAmount)
+    .then((res) => {
+      cakeLpContract.on("Transfer", (from, to, value, event) => {
+        // approveZebraButton.style.display = "none";
+        // stakeZebraButton.removeAttribute("disabled");
+        // console.log(from+" Transferred  "+value+" to "+to);
+        if (from == userAddress && to == stakingContractAddress) {
+          depositCakeModalBs.hide();
+          updateDetails();
+        }
+      });
+    });
+}
 async function updateDetails() {
   updateZZEarned();
   updateZZStaked();
 
   updateZZCakeEarned();
   updateZZCakeStaked();
-
 }
 
 async function updateZZEarned() {
   zzEarned.innerText = await getZZEarned();
 }
 async function updateZZCakeEarned() {
-	zzCakeEarned.innerText = await getZZCakeEarned();
-  }
+  zzCakeEarned.innerText = await getZZCakeEarned();
+}
 
 async function updateZZStaked() {
   zzStaked.innerText = await getZZStaked();
 }
 async function updateZZCakeStaked() {
-	zzCakeStaked.innerText = await getZZCakeStaked();
-  }
+  zzCakeStaked.innerText = await getZZCakeStaked();
+}
 async function getZZEarned() {
   stakingContract = new ethers.Contract(
     stakingContractAddress,
@@ -1942,19 +1927,17 @@ async function getZZEarned() {
   return zE;
 }
 async function getZZCakeEarned() {
-	stakingContract = new ethers.Contract(
-	  stakingContractAddress,
-	  stakingContractABI,
-	  provider
-	);
-	stakingContract = await stakingContract.deployed();
-	let zE = await stakingContract.calculateUserCakeEarnings(
-	  userAddress
-	);
-	zE = ethers.utils.formatUnits(zE, decimals);
-	// console.log(zE)
-	return zE;
-  }
+  stakingContract = new ethers.Contract(
+    stakingContractAddress,
+    stakingContractABI,
+    provider
+  );
+  stakingContract = await stakingContract.deployed();
+  let zE = await stakingContract.calculateUserCakeEarnings(userAddress);
+  zE = ethers.utils.formatUnits(zE, decimals);
+  // console.log(zE)
+  return zE;
+}
 async function getZZStaked() {
   stakingContract = new ethers.Contract(
     stakingContractAddress,
@@ -1968,17 +1951,17 @@ async function getZZStaked() {
   // return zE
 }
 async function getZZCakeStaked() {
-	stakingContract = new ethers.Contract(
-	  stakingContractAddress,
-	  stakingContractABI,
-	  provider
-	);
-	stakingContract = await stakingContract.deployed();
-	let zS = await stakingContract.stakingDetails(userAddress);
-	// zS = ethers.utils.formatUnits(zS.totalOriginalTokenStaked,decimals)
-	return ethers.utils.formatUnits(zS.totalActualCakeStaked, decimals);
-	// return zE
-  }
+  stakingContract = new ethers.Contract(
+    stakingContractAddress,
+    stakingContractABI,
+    provider
+  );
+  stakingContract = await stakingContract.deployed();
+  let zS = await stakingContract.stakingDetails(userAddress);
+  // zS = ethers.utils.formatUnits(zS.totalOriginalTokenStaked,decimals)
+  return ethers.utils.formatUnits(zS.totalActualCakeStaked, decimals);
+  // return zE
+}
 async function claimZebra() {
   stakingContract = new ethers.Contract(
     stakingContractAddress,
@@ -2001,23 +1984,23 @@ async function claimZebra() {
     });
 }
 async function claimCake() {
-	stakingContract = new ethers.Contract(
-	  stakingContractAddress,
-	  stakingContractABI,
-	  provider
-	);
-	stakingContract = await stakingContract.deployed();
-	let action = await stakingContract
-	  .connect(signer)
-	  .claimCakeTokenEarnings()
-	  .then((res) => {
-		cakeLpContract.on("Transfer", (from, to, value, event) => {
-		  if (from == stakingContractAddress && to == userAddress) {
-			updateDetails();
-		  }
-		});
-	  });
-  }
+  stakingContract = new ethers.Contract(
+    stakingContractAddress,
+    stakingContractABI,
+    provider
+  );
+  stakingContract = await stakingContract.deployed();
+  let action = await stakingContract
+    .connect(signer)
+    .claimCakeTokenEarnings()
+    .then((res) => {
+      cakeLpContract.on("Transfer", (from, to, value, event) => {
+        if (from == stakingContractAddress && to == userAddress) {
+          updateDetails();
+        }
+      });
+    });
+}
 async function withdrawZebraToken(amount) {
   let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
   stakingContract = new ethers.Contract(
@@ -2042,25 +2025,25 @@ async function withdrawZebraToken(amount) {
     });
 }
 async function withdrawCakeToken(amount) {
-	let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
-	stakingContract = new ethers.Contract(
-	  stakingContractAddress,
-	  stakingContractABI,
-	  provider
-	);
-	stakingContract = await stakingContract.deployed();
-	let action = await stakingContract
-	  .connect(signer)
-	  .withdrawCake(nAmount)
-	  .then((res) => {
-		cakeLpContract.on("Transfer", (from, to, value, event) => {
-		  // approveZebraButton.style.display = "none";
-		  // stakeZebraButton.removeAttribute("disabled");
-		  // console.log(from+" Transferred  "+value+" to "+to);
-		  if (from == stakingContractAddress && to == userAddress) {
-			updateDetails();
-			withdrawCakeModalBs.hide();
-		  }
-		});
-	  });
-  }
+  let nAmount = BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
+  stakingContract = new ethers.Contract(
+    stakingContractAddress,
+    stakingContractABI,
+    provider
+  );
+  stakingContract = await stakingContract.deployed();
+  let action = await stakingContract
+    .connect(signer)
+    .withdrawCake(nAmount)
+    .then((res) => {
+      cakeLpContract.on("Transfer", (from, to, value, event) => {
+        // approveZebraButton.style.display = "none";
+        // stakeZebraButton.removeAttribute("disabled");
+        // console.log(from+" Transferred  "+value+" to "+to);
+        if (from == stakingContractAddress && to == userAddress) {
+          updateDetails();
+          withdrawCakeModalBs.hide();
+        }
+      });
+    });
+}
