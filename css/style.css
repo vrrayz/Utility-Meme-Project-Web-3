@@ -162,6 +162,10 @@
             background-color: #252525;
         }
 
+        .socials-footer{
+            background-color: #010001;
+        }
+
         @media (max-width: 575.98px) {}
 
         /*Small devices (landscape phones, less than 768px)*/
