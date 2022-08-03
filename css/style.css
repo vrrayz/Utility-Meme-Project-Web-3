@@ -158,6 +158,9 @@
             padding-bottom: 8px;
             font-size: 14px;
         }
+        .modal-content{
+            background-color: #252525;
+        }
 
         @media (max-width: 575.98px) {}
 
